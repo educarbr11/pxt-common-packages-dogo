@@ -1,13 +1,6 @@
 type color = number
 
 namespace image {
-    export enum Dimension {
-        //% block="width"
-        Width,
-        //% block="height"
-        Height
-    }
-
     export function repeatY(count: number, image: Image) {
         let arr = [image]
         while (--count > 0)
@@ -30,24 +23,6 @@ namespace image {
             y += img.height
         }
         return r
-    }
-
-    /**
-     * Returns the width or height of a picture.
-     *
-     * @param picture The picture to get the width or height of
-     * @param dimension The dimension to get
-     * @returns
-     */
-    //% blockId=image_get_dimension
-    //% group="Create"
-    //% blockNamespace="images"
-    //% block="$picture $dimension"
-    //% picture.shadow=variables_get
-    //% picture.defl=picture
-    export function getDimension(picture: Image, dimension: Dimension) {
-        if (dimension === Dimension.Width) return picture.width;
-        else return picture.height;
     }
 }
 
@@ -105,7 +80,7 @@ interface Image {
     fillPolygon4(x0: number, y0: number, x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, col: number): void;
 
     /**
-     * Returns an image rotated by -90, 90, -180, 180, -270, 270 deg clockwise
+     * Returns an image rotated by -90, 0, 90, 180, 270 deg clockwise
      */
     //% helper=imageRotated
     rotated(deg: number): Image;
@@ -164,15 +139,6 @@ namespace helpers {
 
     //% shim=ImageMethods::_blit
     declare function _blit(img: Image, src: Image, args: number[]): boolean;
-
-    //% shim=ImageMethods::_drawScaledRotatedImage
-    declare function _drawScaledRotatedImage(img: Image, src: Image, args: number[]): void;
-
-    //% shim=ImageMethods::_checkOverlapsScaledRotatedImage
-    declare function _checkOverlapsScaledRotatedImage(img: Image, src: Image, args: number[]): boolean;
-
-    //% shim=ImageMethods::_checkOverlapsTwoScaledRotatedImages
-    declare function _checkOverlapsTwoScaledRotatedImages(img: Image, src: Image, args: number[]): boolean;
 
     //% shim=ImageMethods::_fillTriangle
     declare function _fillTriangle(img: Image, args: number[]): void;
@@ -289,39 +255,6 @@ namespace helpers {
         _fillPolygon4(img, _blitArgs);
     }
 
-    export function imageDrawScaledRotated(dest: Image, destX: number, destY: number, src: Image, sx: number, sy: number, angle: number) {
-        _blitArgs = _blitArgs || [];
-        _blitArgs[0] = destX | 0;
-        _blitArgs[1] = destY | 0;
-        _blitArgs[2] = sx;
-        _blitArgs[3] = sy;
-        _blitArgs[4] = angle;
-        _drawScaledRotatedImage(dest, src, _blitArgs);
-    }
-
-    export function checkOverlapsScaledRotatedImage(dest: Image, destX: number, destY: number, src: Image, sx: number, sy: number, angle: number) {
-        _blitArgs = _blitArgs || [];
-        _blitArgs[0] = destX | 0;
-        _blitArgs[1] = destY | 0;
-        _blitArgs[2] = sx;
-        _blitArgs[3] = sy;
-        _blitArgs[4] = angle;
-        return _checkOverlapsScaledRotatedImage(dest, src, _blitArgs);
-    }
-
-    export function checkOverlapsTwoScaledRotatedImages(dest: Image, destX: number, destY: number, destSx: number, destSy: number, destAngle: number, src: Image, sx: number, sy: number, angle: number) {
-        _blitArgs = _blitArgs || [];
-        _blitArgs[0] = destX | 0;
-        _blitArgs[1] = destY | 0;
-        _blitArgs[2] = destSx;
-        _blitArgs[3] = destSy;
-        _blitArgs[4] = destAngle;
-        _blitArgs[5] = sx;
-        _blitArgs[6] = sy;
-        _blitArgs[7] = angle;
-        return _checkOverlapsTwoScaledRotatedImages(dest, src, _blitArgs);
-    }
-
     /**
      * Returns an image rotated by 90, 180, 270 deg clockwise
      */
@@ -335,7 +268,7 @@ namespace helpers {
             r.flipX();
             r.flipY();
             return r;
-        } else if (deg == 90 || deg == -270) {
+        } else if (deg == 90) {
             let r = img.transposed();
             r.flipX();
             return r;

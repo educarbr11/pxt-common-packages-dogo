@@ -1,12 +1,12 @@
 
 enum RadioPacketProperty {
     //% blockIdentity=radio._packetProperty
-    //% block="signal strength"
+    //% block="intensidade do sinal"
     SignalStrength = 2,
     //% blockIdentity=radio._packetProperty
-    //% block="time"
+    //% block="tempo"
     Time = 0,
-    //% block="serial number"
+    //% block="número serial"
     //% blockIdentity=radio._packetProperty
     SerialNumber = 1
 }
@@ -14,7 +14,7 @@ enum RadioPacketProperty {
 /**
  * Communicate data using radio packets
  */
-//% color=#E3008C weight=96 icon="\uf012" groups='["Group", "Broadcast", "Send", "Receive"]'
+//% color=#E3008C weight=96 icon="\uf012" groups='["CANAL", "Broadcast", "ENVIO", "RECEBER"]' block="RÁDIO"
 namespace radio {
 
     // keep in sync with CODAL
@@ -90,12 +90,12 @@ namespace radio {
     }
 
     /**
-     * Registers code to run when the radio receives a number.
+     * Registra o código a ser executado quando o rádio recebe um número.
      */
     //% help=radio/on-received-number
-    //% blockId=radio_on_number_drag block="on radio received" blockGap=16
+    //% blockId=radio_on_number_drag block="quando rádio receber um número" blockGap=16
     //% useLoc="radio.onDataPacketReceived" draggableParameters=reporter
-    //% group="Receive"
+    //% group="RECEBER"x
     //% weight=20
     export function onReceivedNumber(cb: (receivedNumber: number) => void) {
         init();
@@ -103,12 +103,12 @@ namespace radio {
     }
 
     /**
-     * Registers code to run when the radio receives a key value pair.
+     * Registra o código a ser executado quando o rádio recebe um par de valores-chave.
      */
     //% help=radio/on-received-value
-    //% blockId=radio_on_value_drag block="on radio received" blockGap=16
+    //% blockId=radio_on_value_drag block="quando rádio receber um par nome-valor" blockGap=16
     //% useLoc="radio.onDataPacketReceived" draggableParameters=reporter
-    //% group="Receive"
+    //% group="RECEBER"
     //% weight=19
     export function onReceivedValue(cb: (name: string, value: number) => void) {
         init();
@@ -116,12 +116,12 @@ namespace radio {
     }
 
     /**
-     * Registers code to run when the radio receives a string.
+     * Registra o código a ser executado quando o rádio recebe uma string.
      */
     //% help=radio/on-received-string
-    //% blockId=radio_on_string_drag block="on radio received" blockGap=16
+    //% blockId=radio_on_string_drag block="quando rádio receber um texto" blockGap=16
     //% useLoc="radio.onDataPacketReceived" draggableParameters=reporter
-    //% group="Receive"
+    //% group="RECEBER"
     //% weight=18
     export function onReceivedString(cb: (receivedString: string) => void) {
         init();
@@ -140,13 +140,13 @@ namespace radio {
     }
 
     /**
-     * Returns properties of the last radio packet received.
-     * @param type the type of property to retrieve from the last packet
+     * Retorna propriedades do último pacote de rádio recebido.
+     * @param type o tipo de propriedade a ser recuperada do último pacote
      */
     //% help=radio/received-packet
     //% blockGap=8
-    //% blockId=radio_received_packet block="received packet %type=radio_packet_property" blockGap=16
-    //% group="Receive"
+    //% blockId=radio_received_packet block="receber pacote de dados %type=radio_packet_property" blockGap=16
+    //% group="RECEBER"
     //% weight=16
     export function receivedPacket(type: number) {
         if (lastPacket) {
@@ -275,12 +275,12 @@ namespace radio {
     }
 
     /**
-     * Broadcasts a number over radio to any connected micro:bit in the group.
+     * Transmite um número através de rádio para qualquer micro:bit conectado no grupo.
      */
     //% help=radio/send-number
     //% weight=60
-    //% blockId=radio_datagram_send block="radio send number %value" blockGap=8
-    //% group="Send"
+    //% blockId=radio_datagram_send block="rádio: enviar número %value" blockGap=8
+    //% group="ENVIO"
     export function sendNumber(value: number) {
         let packet: RadioPacket;
 
@@ -296,16 +296,16 @@ namespace radio {
     }
 
     /**
-    * Broadcasts a name / value pair along with the device serial number
-    * and running time to any connected micro:bit in the group. The name can
-    * include no more than 8 characters.
-    * @param name the field name (max 8 characters), eg: "name"
-    * @param value the numeric value
+    * Transmite um par nome/valor junto com o número de série do dispositivo
+    * e tempo de execução para qualquer micro:bit conectado no grupo. 
+    * O nome pode incluir no máximo 8 caracteres.
+    * @param name o nome do campo (máximo de 8 caracteres), por exemplo: "nome"
+    * @param value o valor númerico
     */
     //% help=radio/send-value
     //% weight=59
-    //% blockId=radio_datagram_send_value block="radio send|value %name|= %value" blockGap=8
-    //% group="Send"
+    //% blockId=radio_datagram_send_value block="rádio: enviar|nome %name|e valor %value" blockGap=8
+    //% group="ENVIO"
     export function sendValue(name: string, value: number) {
         let packet: RadioPacket;
 
@@ -322,14 +322,14 @@ namespace radio {
     }
 
     /**
-     * Broadcasts a string along with the device serial number
-     * and running time to any connected micro:bit in the group.
+    * Transmite uma string junto com o número de série do dispositivo
+    * e tempo de execução para qualquer micro:bit conectado no grupo.
      */
     //% help=radio/send-string
     //% weight=58
-    //% blockId=radio_datagram_send_string block="radio send string %msg"
+    //% blockId=radio_datagram_send_string block="rádio: enviar texto %msg"
     //% msg.shadowOptions.toString=true
-    //% group="Send"
+    //% group="ENVIO"
     export function sendString(value: string) {
         const packet = RadioPacket.mkPacket(PACKET_TYPE_STRING);
         packet.stringPayload = value;
@@ -349,14 +349,14 @@ namespace radio {
         sendPacket(packet);
     }
 
-    /**
-    * Set the radio to transmit the serial number in each message.
-    * @param transmit value indicating if the serial number is transmitted, eg: true
-    */
+   /**
+     * Configurar o rádio para transmitir o número de série em cada mensagem.
+     * @param transmit valor indicando se o número de série será transmitido, ex: true
+     */
     //% help=radio/set-transmit-serial-number
     //% weight=8 blockGap=8
-    //% blockId=radio_set_transmit_serial_number block="radio set transmit serial number %transmit"
-    //% advanced=true
+    //% blockId=radio_set_transmit_serial_number block="rádio: configurar transmissão do número de série %transmit"
+    //% advanced=false
     export function setTransmitSerialNumber(transmit: boolean) {
         transmittingSerial = transmit;
     }

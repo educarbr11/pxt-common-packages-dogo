@@ -1161,25 +1161,10 @@ bool removeElement(RefCollection *c, TValue x);
 // The vtable pointers are there, so that the ::emptyData for various types
 // can be patched with the right vtable.
 //
-
-#ifndef MICROBIT_CODAL
-#define FLASH_TOP 0x00000000
-#else
-#if MICROBIT_CODAL
-#if MICROBIT_TOP_OF_FLASH
-#define FLASH_TOP MICROBIT_TOP_OF_FLASH
-#else
-#define FLASH_TOP 0x00073000
-#endif
-#else
-#define FLASH_TOP 0x00000000
-#endif         
-#endif
-
 #define PXT_SHIMS_BEGIN                                                                            \
     namespace pxt {                                                                                \
     const uintptr_t functionsAndBytecode[]                                                         \
-        __attribute__((aligned(0x20))) = {0x08010801, 0x42424242, 0x08010801, 0x8de9d83e, FLASH_TOP,
+        __attribute__((aligned(0x20))) = {0x08010801, 0x42424242, 0x08010801, 0x8de9d83e,
 
 #define PXT_SHIMS_END                                                                              \
     }                                                                                              \

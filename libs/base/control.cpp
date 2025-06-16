@@ -3,7 +3,7 @@
 
 namespace control {
     /**
-    * Gets the number of milliseconds elapsed since power on.
+    * Obtém o número de milissegundos que se passaram desde o momento em que o sistema foi ligado.
     */
     //% help=control/millis weight=50
     //% blockId=control_running_time block="millis (ms)"
@@ -31,17 +31,17 @@ namespace control {
      * Reset the device.
      */
     //% weight=30 async help=control/reset blockGap=8
-    //% blockId="control_reset" block="reset"
+    //% blockId="control_reset" block="reiniciar"
     void reset() {
         target_reset();
     }
 
     /**
-    * Block the current fiber for the given microseconds
-    * @param micros number of micro-seconds to wait. eg: 4
+    * Bloqueia a fibra atual pelo número de microssegundos especificado
+    * @param micros número de microssegundos para aguardar. Exemplo: 4
     */
     //% help=control/wait-micros weight=29 async
-    //% blockId="control_wait_us" block="wait (µs)%micros"
+    //% blockId="control_wait_us" block="esperar (µs)%micros"
     void waitMicros(int micros) {
         sleep_us(micros);
     }
@@ -56,10 +56,10 @@ namespace control {
     }
 
     /**
-    * Blocks the calling thread until the specified event is raised.
+    * Bloqueia a thread de chamada até que o evento especificado seja acionado.
     */
     //% help=control/wait-for-event async
-    //% blockId=control_wait_for_event block="wait for event|from %src|with value %value"
+    //% blockId=control_wait_for_event block="esperar evento de %src|com o valor %value"
     void waitForEvent(int src, int value) {
         pxt::waitForEvent(src, value);
     }

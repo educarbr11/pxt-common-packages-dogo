@@ -435,7 +435,7 @@ namespace mp {
     //% blockId=mp_setPlayerSprite
     //% block="set $player sprite to $sprite"
     //% player.shadow=mp_playerSelector
-    //% sprite.shadow=spritescreatenoset
+    //% sprite.shadow=spritescreate
     //% group=Player
     //% weight=120
     //% blockGap=8

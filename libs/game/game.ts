@@ -174,10 +174,7 @@ namespace game {
         const oldScene = game.currentScene()
         particles.clearAll();
         particles.disableAll();
-        if (!_sceneStack) {
-            _sceneStack = [];
-            music._initializeSceneStack(game.addScenePushHandler, game.addScenePopHandler);
-        }
+        if (!_sceneStack) _sceneStack = [];
         _sceneStack.push(_scene);
         init(/** forceNewScene **/ true);
 
@@ -303,7 +300,7 @@ namespace game {
     /**
      * Set the message that displays when the game is over
      * @param win whether the message should show on a win (true) or lose (false)
-     * @param message
+     * @param message 
      */
     //% blockId=game_setgameovermessage
     //% block="use message $message for $win"

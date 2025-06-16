@@ -105,7 +105,6 @@ class Sprite extends sprites.BaseSprite {
     _sy: Fx8 // scale
     _width: Fx8 // scaled width
     _height: Fx8 // scaled height
-    _rotatedBBox: sprites.RotatedBoundingBox;
 
     //% group="Physics" blockSetVariable="mySprite"
     //% blockCombine block="x" callInDebugger
@@ -201,12 +200,10 @@ class Sprite extends sprites.BaseSprite {
     //% group="Physics" blockSetVariable="mySprite"
     //% blockCombine block="sx (scale x)"
     set sx(v: number) {
-        const y = this.y;
         const x = this.x;
         this._sx = Fx8(Math.max(0, v));
         this.recalcSize();
-        this.y = y;
-        this.x = x;
+        this.left = x - this.width / 2;
     }
     //% group="Physics" blockSetVariable="mySprite"
     //% blockCombine block="sy (scale y)" callInDebugger
@@ -217,13 +214,10 @@ class Sprite extends sprites.BaseSprite {
     //% blockCombine block="sy (scale y)"
     set sy(v: number) {
         const y = this.y;
-        const x = this.x;
         this._sy = Fx8(Math.max(0, v));
         this.recalcSize();
-        this.y = y;
-        this.x = x;
+        this.top = y - this.height / 2;
     }
-
     //% group="Physics" blockSetVariable="mySprite"
     //% blockCombine block="scale" callInDebugger
     get scale(): number {
@@ -233,36 +227,6 @@ class Sprite extends sprites.BaseSprite {
     //% blockCombine block="scale"
     set scale(v: number) {
         this.sx = this.sy = v;
-    }
-
-    //% group="Physics" blockSetVariable="mySprite"
-    //% blockCombine block="rotation (radians)" callInDebugger
-    get rotation(): number {
-        return this._rotatedBBox ? this._rotatedBBox.rotation : 0;
-    }
-    //% group="Physics" blockSetVariable="mySprite"
-    //% blockCombine block="rotation (radians)"
-    set rotation(v: number) {
-        const x = this.x;
-        const y = this.y;
-        if (!this._rotatedBBox) {
-            this._rotatedBBox = new sprites.RotatedBoundingBox(this, this.width, this.height);
-        }
-        this._rotatedBBox.setRotation(v);
-        this.recalcSize();
-        this.x = x;
-        this.y = y;
-    }
-
-    //% group="Physics" blockSetVariable="mySprite"
-    //% blockCombine block="rotation (degrees)" callInDebugger
-    get rotationDegrees(): number {
-        return this.rotation * 180 / Math.PI;
-    }
-    //% group="Physics" blockSetVariable="mySprite"
-    //% blockCombine block="rotation (degrees)"
-    set rotationDegrees(v: number) {
-        this.rotation = v * Math.PI / 180;
     }
 
     private _data: any;
@@ -306,7 +270,6 @@ class Sprite extends sprites.BaseSprite {
 
     _hitbox: game.Hitbox;
     _overlappers: number[];
-    _alreadyChecked: number[];
     _kindsOverlappedWith: number[];
 
     flags: number
@@ -315,10 +278,6 @@ class Sprite extends sprites.BaseSprite {
 
     constructor(img: Image) {
         super(scene.SPRITE_Z);
-
-        if (!img) {
-            throw "Sprite image cannot be undefined or null";
-        }
 
         this._x = Fx8(screen.width - img.width >> 1);
         this._y = Fx8(screen.height - img.height >> 1);
@@ -378,7 +337,7 @@ class Sprite extends sprites.BaseSprite {
     }
 
     calcDimensionalHash() {
-        return this._image.revision() + Fx.toIntShifted(this._width, 8) + Fx.toIntShifted(this._height, 16) + this.rotation;
+        return this._image.revision() + Fx.toIntShifted(this._width, 8) + Fx.toIntShifted(this._height, 16);
     }
 
     resetHitbox() {
@@ -403,15 +362,8 @@ class Sprite extends sprites.BaseSprite {
     }
 
     protected recalcSize(): void {
-        if (this._rotatedBBox) {
-            this._rotatedBBox.setDimensions(this._image.width * this.sx, this._image.height * this.sy);
-            this._width = Fx8(this._rotatedBBox.width);
-            this._height = Fx8(this._rotatedBBox.height);
-        }
-        else {
-            this._width = Fx8(this._image.width * this.sx);
-            this._height = Fx8(this._image.height * this.sy);
-        }
+        this._width = Fx8(this._image.width * this.sx);
+        this._height = Fx8(this._image.height * this.sy);
         this.resetHitbox();
     }
 
@@ -735,7 +687,7 @@ class Sprite extends sprites.BaseSprite {
     //% blockId=spriteoverlapswith block="%sprite(mySprite) overlaps with %other=variables_get(otherSprite)"
     //% help=sprites/sprite/overlaps-with
     //% weight=90
-    overlapsWith(other: Sprite): boolean {
+    overlapsWith(other: Sprite) {
         control.enablePerfCounter("overlapsCPP")
         if (other == this) return false;
         if (this.flags & SPRITE_NO_SPRITE_OVERLAPS)
@@ -746,47 +698,7 @@ class Sprite extends sprites.BaseSprite {
             return other._hitbox.overlapsWith(this._hitbox);
         if (!other._hitbox.overlapsWith(this._hitbox))
             return false;
-        else if (this._rotatedBBox) {
-            if (other._rotatedBBox) {
-                if (this._rotatedBBox.overlaps(other._rotatedBBox)) {
-                    return helpers.checkOverlapsTwoScaledRotatedImages(
-                        other.image,
-                        this.left - other.left,
-                        this.top - other.top,
-                        other.sx,
-                        other.sy,
-                        other.rotation,
-                        this.image,
-                        this.sx,
-                        this.sy,
-                        this.rotation
-                    );
-                }
-                else {
-                    return false;
-                }
-            }
-            else {
-                if (this._rotatedBBox.overlapsAABB(other.left, other.top, other.right, other.bottom)) {
-                    return helpers.checkOverlapsScaledRotatedImage(
-                        other.image,
-                        this.left - other.left,
-                        this.top - other.top,
-                        this.image,
-                        this.sx,
-                        this.sy,
-                        this.rotation
-                    );
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-        else if (other._rotatedBBox) {
-            return other.overlapsWith(this);
-        }
-        else if (!this.isScaled() && !other.isScaled()) {
+        if (!this.isScaled() && !other.isScaled()) {
             return other._image.overlapsWith(
                 this._image,
                 this.left - other.left,
@@ -877,6 +789,7 @@ class Sprite extends sprites.BaseSprite {
      */
     //% blockId=spriteobstacle block="%sprite(mySprite) wall hit on %direction"
     //% blockNamespace="scene" group="Locations"
+    //% direction.shadow=tiles_collision_direction_editor
     //% help=sprites/sprite/tile-hit-from
     //% deprecated=1
     tileHitFrom(direction: number): number {
@@ -1204,18 +1117,7 @@ class Sprite extends sprites.BaseSprite {
     }
 
     protected drawSprite(drawLeft: number, drawTop: number) {
-        if (this._rotatedBBox) {
-            helpers.imageDrawScaledRotated(
-                screen,
-                drawLeft,
-                drawTop,
-                this._image,
-                this.sx,
-                this.sy,
-                this.rotation
-            );
-        }
-        else if (!this.isScaled())
+        if (!this.isScaled())
             screen.drawTransparentImage(this._image, drawLeft, drawTop);
         else
             screen.blit(

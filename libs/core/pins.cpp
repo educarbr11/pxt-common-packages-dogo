@@ -86,11 +86,11 @@ Buffer createBuffer(int size) {
 }
 
 /**
- * Get the duration of the last pulse in microseconds. This function should be called from a
- * ``onPulsed`` handler.
+ * Obtém a duração do último pulso em microssegundos. Esta função deve ser chamada de um
+ * manipulador ``onPulsed``.
  */
 //% help=pins/pulse-duration blockGap=8
-//% blockId=pins_pulse_duration block="pulse duration (µs)"
+//% blockId=pins_pulse_duration block="duração do pulso (µs)"
 //% weight=19
 int pulseDuration() {
     return pxt::lastEvent.timestamp;

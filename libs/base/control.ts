@@ -1,13 +1,13 @@
 /**
 * Program controls and events.
 */
-//% weight=90 color="#FF5722" icon="\uf110" advanced=true
+//% weight=90 color="#FF5722" icon="\uf110" advanced=true block="CONTROLE"
 namespace control {
     /**
      * Deprecated, use ``control.runInParallel`` instead.
      */
     //% deprecated=1 hidden=1 help=control/run-in-background blockAllowMultiple=1 afterOnStart=true
-    //% blockId="control_run_in_background" block="run in background" blockGap=8 weight=0
+    //% blockId="control_run_in_background" block="excutar em segundo plano" blockGap=8 weight=0
     export function runInBackground(a: () => void) {
         control.runInParallel(a);
     }

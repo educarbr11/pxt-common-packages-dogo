@@ -198,7 +198,7 @@ int acceleration(Dimension dimension) {
 //% help=input/rotation
 //% blockId=device_get_rotation block="rotation (°)|%NAME"
 //% parts="accelerometer"
-//% group="More" weight=38
+// % group="More" weight=38
 int rotation(Rotation kind) {
     auto acc = getAccelerometer();
     if (!acc) return 0;

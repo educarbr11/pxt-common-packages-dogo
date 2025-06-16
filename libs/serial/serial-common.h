@@ -30,14 +30,14 @@ enum class BaudRate {
 };
 
 enum class SerialEvent {
-    //% block="data received"
+    //% block="dados recebidos"
     DataReceived = CODAL_SERIAL_EVT_DATA_RECEIVED,
-    //% block="rx buffer full"
+    //% block="buffer RX cheio"
     RxBufferFull = CODAL_SERIAL_EVT_RX_FULL
 };
 
 enum class Delimiters {
-    //% block="new line (\n)"
+    //% block="nova linha (\n)"
     NewLine = 10,
     //% block=","
     Comma = 44,
@@ -49,11 +49,11 @@ enum class Delimiters {
     Fullstop = 46,
     //% block="#"
     Hash = 35,
-    //% block="carriage return (\r)"
+    //% block="retorno (\r)"
     CarriageReturn = 13,
-    //% block="space"
+    //% block="espaço"
     Space = 32,
-    //% block="tab (\t)"
+    //% block="tabulação (\t)"
     Tab = 9,
     //% block="|"
     Pipe = 124,

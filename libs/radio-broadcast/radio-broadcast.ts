@@ -2,7 +2,7 @@ namespace radio {
     const BROADCAST_GENERAL_ID = 2000;
 
     /**
-     * Gets the message code
+     * Pega a messagem de rádio
      */
     //% blockHidden=1 shim=ENUM_GET
     //% blockId=radioMessageCode block="$msg" enumInitialMembers="message1"
@@ -13,10 +13,10 @@ namespace radio {
     }
 
     /**
-     * Broadcasts a message over radio
+     * Transmite uma mensagem pelo rádio
      * @param msg 
      */
-    //% blockId=radioBroadcastMessage block="radio send $msg"
+    //% blockId=radioBroadcastMessage block="rádio: enviar mensagem $msg"
     //% msg.shadow=radioMessageCode draggableParameters
     //% weight=200
     //% blockGap=8
@@ -28,11 +28,11 @@ namespace radio {
     }
 
     /**
-     * Registers code to run for a particular message
+     * Registra o código a ser executado para uma mensagem específica
      * @param msg 
      * @param handler 
      */
-    //% blockId=radioOnMessageReceived block="on radio $msg received"
+    //% blockId=radioOnMessageReceived block="quando o rádio receber $msg"
     //% msg.shadow=radioMessageCode draggableParameters
     //% weight=199
     //% help=radio/on-received-message

@@ -8,13 +8,13 @@ extern uint32_t _estack;
 namespace control {
 
 /**
- * Announce that an event happened to registered handlers.
- * @param src ID of the MicroBit Component that generated the event
- * @param value Component specific code indicating the cause of the event.
+ * Anuncia que um evento ocorreu para os manipuladores registrados.
+ * @param src ID do Componente MicroBit que gerou o evento
+ * @param value Código específico do componente indicando a causa do evento.
  */
 //% weight=21 blockGap=12 blockId="control_raise_event"
 //% help=control/raise-event
-//% block="raise event|from %src|with value %value" blockExternalInputs=1
+//% block="ativar evento|da fonte %src|com valor %value" blockExternalInputs=1
 void raiseEvent(int src, int value) {
     Event evt(src, value);
 }

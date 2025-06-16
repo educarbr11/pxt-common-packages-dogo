@@ -5,7 +5,6 @@ namespace sprites {
         private rowCount: number;
         private columnCount: number;
         private buckets: Sprite[][];
-        filledBuckets: Sprite[][];
 
         constructor() {
             this.buckets = [];
@@ -65,15 +64,14 @@ namespace sprites {
             const areaWidth = tMap ? tMap.areaWidth() : screen.width;
             const areaHeight = tMap ? tMap.areaHeight() : screen.height;
 
-            this.cellWidth = Math.clamp(8, areaWidth >> 2, maxWidth << 1);
-            this.cellHeight = Math.clamp(8, areaHeight >> 2, maxHeight << 1);
+            this.cellWidth = Math.clamp(8, areaWidth >> 2, maxWidth * 2);
+            this.cellHeight = Math.clamp(8, areaHeight >> 2, maxHeight * 2);
             this.rowCount = Math.idiv(areaHeight, this.cellHeight);
             this.columnCount = Math.idiv(areaWidth, this.cellWidth);
         }
 
         clear() {
             this.buckets = [];
-            this.filledBuckets = [];
         }
 
         private key(x: number, y: number): number {
@@ -85,10 +83,8 @@ namespace sprites {
         private insertAtKey(x: number, y: number, sprite: Sprite) {
             const k = this.key(x, y);
             let bucket = this.buckets[k];
-            if (!bucket) {
+            if (!bucket)
                 bucket = this.buckets[k] = [];
-                this.filledBuckets.push(bucket);
-            }
             if (bucket.indexOf(sprite) < 0)
                 bucket.push(sprite);
         }

@@ -98,12 +98,12 @@ void onEvent(DigitalInOutPin pin, PinEvent event, Action body) {
 }
 
 /**
-* Return the duration of a pulse in microseconds
-* @param name the pin which measures the pulse
-* @param value the value of the pulse (default high)
-* @param maximum duration in micro-seconds
-*/
-//% blockId="pins_pulse_in" block="pulse in (µs)|pin %name|pulsed %high||timeout %maxDuration (µs)"
+ * Retorna a duração de um pulso em microssegundos.
+ * @param name o pino que mede o pulso
+ * @param value o valor do pulso (padrão alto)
+ * @param maximum duração máxima em microssegundos
+ */
+//% blockId="pins_pulse_in" block="pulso em (µs)|pino %name|pulsado %high||por tempo máximo %maxDuration (µs)"
 //% weight=18 blockGap=8
 //% help="pins/pulse-in"
 //% blockNamespace=pins
